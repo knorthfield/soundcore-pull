@@ -31,6 +31,26 @@
           "glass" : true,
           "image-name-specializations" : [
             {
+              "value" : "symbol-light.png"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "symbol-dark.png"
+            }
+          ],
+          "name" : "symbol",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "glass" : true,
+          "image-name-specializations" : [
+            {
               "value" : "mic-light.png"
             },
             {

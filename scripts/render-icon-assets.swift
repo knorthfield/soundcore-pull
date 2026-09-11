@@ -1,6 +1,7 @@
 #!/usr/bin/env swift
 // Draws the app icon layers (1024 x 1024 PNGs) into SoundcorePull/AppIcon.icon/Assets.
 // Coordinates below are Icon Composer points: origin at the canvas centre, y down.
+import AppKit
 import CoreGraphics
 import Foundation
 import ImageIO
@@ -58,6 +59,27 @@ for (variant, body, grille) in [("light", 0.80, 0.55), ("dark", 0.22, 0.45)] {
         for offset in [-150.0, 150.0] {
             roundedRect(context, center: CGPoint(x: micCenter.x, y: micCenter.y + offset), width: 70, height: 16, radius: 8, color: gray(grille))
         }
+    }
+}
+
+// Symbol: an SF Symbol where the soundcore logo sits on the real case.
+func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPoint, color: CGColor) {
+    let configuration = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .medium)
+    let image = NSImage(systemSymbolName: name, accessibilityDescription: nil)!.withSymbolConfiguration(configuration)!
+    let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+    let width = CGFloat(cgImage.width), height = CGFloat(cgImage.height)
+    context.saveGState()
+    context.scaleBy(x: 1, y: -1)                          // undo the flip so the glyph is upright
+    let rect = CGRect(x: center.x - width / 2, y: -center.y - height / 2, width: width, height: height)
+    context.clip(to: rect, mask: cgImage)
+    context.setFillColor(color)
+    context.fill(rect)
+    context.restoreGState()
+}
+
+for (variant, tone) in [("light", 0.72), ("dark", 0.36)] {
+    try draw("symbol-\(variant)") { context in
+        symbol(context, name: "music.note", pointSize: 210, center: CGPoint(x: -190, y: 175), color: gray(tone))
     }
 }
 
