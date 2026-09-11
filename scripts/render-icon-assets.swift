@@ -42,15 +42,8 @@ func roundedRect(_ context: CGContext, center: CGPoint, width: CGFloat, height: 
     context.fillPath()
 }
 
-let micCenter = CGPoint(x: 180, y: -190)
+let micCenter = CGPoint(x: 235, y: -235)
 let micDiameter: CGFloat = 440
-
-// Clip: a tab that pokes up from behind the mic towards the top edge.
-for (variant, tone) in [("light", 0.62), ("dark", 0.30)] {
-    try draw("clip-\(variant)") { context in
-        roundedRect(context, center: CGPoint(x: 240, y: -350), width: 96, height: 260, radius: 45, color: gray(tone))
-    }
-}
 
 // Mic: the round bean with two grille slots.
 for (variant, body, grille) in [("light", 0.80, 0.55), ("dark", 0.22, 0.45)] {
@@ -79,7 +72,7 @@ func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPo
 
 for (variant, tone) in [("light", 0.72), ("dark", 0.36)] {
     try draw("symbol-\(variant)") { context in
-        symbol(context, name: "mic.fill", pointSize: 210, center: CGPoint(x: -190, y: 175), color: gray(tone))
+        symbol(context, name: "mic.fill", pointSize: 150, center: CGPoint(x: -200, y: 200), color: gray(tone))
     }
 }
 

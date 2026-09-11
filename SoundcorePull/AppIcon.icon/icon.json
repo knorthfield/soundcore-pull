@@ -1,107 +1,87 @@
 {
-  "fill-specializations" : [
+  "fill-specializations": [
     {
-      "value" : {
-        "solid" : "srgb:0.93000,0.93000,0.94000,1.00000"
+      "value": {
+        "solid": "srgb:0.93000,0.93000,0.94000,1.00000"
       }
     },
     {
-      "appearance" : "dark",
-      "value" : {
-        "solid" : "srgb:0.13000,0.14000,0.16000,1.00000"
+      "appearance": "dark",
+      "value": {
+        "solid": "srgb:0.13000,0.14000,0.16000,1.00000"
       }
     }
   ],
-  "groups" : [
+  "groups": [
     {
-      "layers" : [
+      "layers": [
         {
-          "glass" : false,
-          "image-name" : "led.png",
-          "name" : "led",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
+          "glass": false,
+          "image-name": "led.png",
+          "name": "led",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
               0,
               0
             ]
           }
         },
         {
-          "glass" : true,
-          "image-name-specializations" : [
+          "glass": true,
+          "image-name-specializations": [
             {
-              "value" : "symbol-light.png"
+              "value": "symbol-light.png"
             },
             {
-              "appearance" : "dark",
-              "value" : "symbol-dark.png"
+              "appearance": "dark",
+              "value": "symbol-dark.png"
             }
           ],
-          "name" : "symbol",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
+          "name": "symbol",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
               0,
               0
             ]
           }
         },
         {
-          "glass" : true,
-          "image-name-specializations" : [
+          "glass": true,
+          "image-name-specializations": [
             {
-              "value" : "mic-light.png"
+              "value": "mic-light.png"
             },
             {
-              "appearance" : "dark",
-              "value" : "mic-dark.png"
+              "appearance": "dark",
+              "value": "mic-dark.png"
             }
           ],
-          "name" : "mic",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              0,
-              0
-            ]
-          }
-        },
-        {
-          "glass" : true,
-          "image-name-specializations" : [
-            {
-              "value" : "clip-light.png"
-            },
-            {
-              "appearance" : "dark",
-              "value" : "clip-dark.png"
-            }
-          ],
-          "name" : "clip",
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
+          "name": "mic",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
               0,
               0
             ]
           }
         }
       ],
-      "lighting" : "individual",
-      "name" : "recorder",
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
+      "lighting": "individual",
+      "name": "recorder",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
       },
-      "specular" : true,
-      "translucency" : {
-        "enabled" : false,
-        "value" : 0.5
+      "specular": true,
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
       }
     }
   ],
-  "supported-platforms" : {
-    "squares" : "shared"
+  "supported-platforms": {
+    "squares": "shared"
   }
 }
