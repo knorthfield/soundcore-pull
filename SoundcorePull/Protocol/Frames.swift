@@ -28,6 +28,12 @@ enum Frames {
 
     // Commands
     static func getDeviceInfo() -> Data { encode(type: 0x01, id: 0x01) }
+    /// Unix seconds LE plus a signed timezone-offset-in-hours byte, matching the Anker app.
+    static func syncTime(_ date: Date = Date()) -> Data {
+        let seconds = UInt32(date.timeIntervalSince1970)
+        let offsetHours = Int8(truncatingIfNeeded: TimeZone.current.secondsFromGMT(for: date) / 3600)
+        return encode(type: 0x01, id: 0xA6, payload: u32(seconds) + Data([UInt8(bitPattern: offsetHours)]))
+    }
     /// The plain list (0x1A). Firmware 03.36 answers the with-end-time variant (0x1B) with an empty payload.
     static func listFiles(page: UInt16) -> Data { encode(type: 0x1A, id: 0x0E, payload: u16(page)) }
     static func handshake(publicKey: Data) -> Data { encode(type: 0x2E, id: 0x01, payload: publicKey) }
@@ -147,7 +153,7 @@ struct RecordingEntry {
 
     var startDate: Date { Date(timeIntervalSince1970: TimeInterval(fileId)) }
 
-    /// Size tracks encoded milliseconds closely.
+    /// The list's second field is not a byte count: it tracks encoded milliseconds.
     var estimatedDuration: TimeInterval { TimeInterval(sizeBytes) / 1000 }
 
     static func parseList(_ p: Data) -> [RecordingEntry] {

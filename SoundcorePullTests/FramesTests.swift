@@ -12,6 +12,13 @@ final class FramesTests: XCTestCase {
         XCTAssertEqual([UInt8](frame), [0x08, 0xEE, 0x00, 0x00, 0x00, 0x1A, 0x0E, 0x0C, 0x00, 0x01, 0x00, 0x2B])
     }
 
+    func testEncodeSyncTime() {
+        let frame = [UInt8](Frames.syncTime(Date(timeIntervalSince1970: 1_789_159_433)))
+        XCTAssertEqual(frame.prefix(9), [0x08, 0xEE, 0x00, 0x00, 0x00, 0x01, 0xA6, 0x0F, 0x00])
+        XCTAssertEqual(Array(frame[9..<13]), [0x09, 0x68, 0xA4, 0x6A])
+        XCTAssertEqual(frame.count, 15)
+    }
+
     func testStartExportPayload() {
         let frame = Frames.startExport(fileId: 0x0102_0304)
         XCTAssertEqual(frame.count, 19)

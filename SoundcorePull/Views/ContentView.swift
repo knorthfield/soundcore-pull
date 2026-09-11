@@ -117,9 +117,8 @@ struct ContentView: View {
 
     private func caption(_ row: RecordingRow) -> String {
         var parts: [String] = []
-        if let entry = row.onRecorder {
-            parts.append(Self.duration.string(from: entry.estimatedDuration) ?? "")
-            parts.append(ByteCountFormatter.string(fromByteCount: Int64(entry.sizeBytes), countStyle: .file))
+        if let entry = row.onRecorder, let duration = Self.duration.string(from: entry.estimatedDuration) {
+            parts.append(duration)
         }
         parts.append(row.statusText)
         return parts.joined(separator: " · ")

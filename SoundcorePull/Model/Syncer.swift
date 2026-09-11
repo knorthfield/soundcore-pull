@@ -66,6 +66,10 @@ final class Syncer {
         log.notice("device info: \(infoReply.hex, privacy: .public)")
         post { $0.deviceInfo = info; $0.phase = .connected }
 
+        // The recorder stamps each recording's id with its own clock, so keep it in step with ours.
+        let clockReply = try recorder.request(Frames.syncTime(), type: 0x01, id: 0xA6, timeout: 8, "clock sync")
+        log.notice("clock sync: \(clockReply.hex, privacy: .public)")
+
         while true {
             let entries = try fetchRecordings(recorder)
             post { $0.recordings = entries }
