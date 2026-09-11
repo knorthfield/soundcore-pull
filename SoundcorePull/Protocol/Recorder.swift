@@ -1,5 +1,8 @@
 import CoreBluetooth
 import Foundation
+import os
+
+private let log = Logger(subsystem: "soundcore-pull", category: "rx")
 
 enum RecorderError: Error, CustomStringConvertible {
     case bluetoothOff(CBManagerState)
@@ -153,6 +156,9 @@ extension Recorder: CBCentralManagerDelegate, CBPeripheralDelegate {
         guard let value = characteristic.value else { return }
         let complete = packets.feed(value)
         guard !complete.isEmpty else { return }
+        for frame in complete where frame.id != 0x08 && frame.id != 0x12 {
+            log.notice("rx type \(String(frame.type, radix: 16), privacy: .public) id \(String(frame.id, radix: 16), privacy: .public): \(frame.hex, privacy: .public)")
+        }
         frames.lock()
         pending.append(contentsOf: complete)
         frames.broadcast()

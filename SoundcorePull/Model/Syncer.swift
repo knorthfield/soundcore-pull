@@ -1,4 +1,7 @@
 import Foundation
+import os
+
+private let log = Logger(subsystem: "soundcore-pull", category: "protocol")
 
 /// Keeps a recorder session alive in the background and pulls new recordings into the library.
 @Observable @MainActor
@@ -60,6 +63,7 @@ final class Syncer {
         let crypto = DeviceCrypto()
         let infoReply = try recorder.request(Frames.getDeviceInfo(), type: 0x01, id: 0x01, timeout: 8, "device info")
         let info = DeviceInfo.parse(infoReply.payload)
+        log.notice("device info: \(infoReply.hex, privacy: .public)")
         post { $0.deviceInfo = info; $0.phase = .connected }
 
         while true {
@@ -85,8 +89,10 @@ final class Syncer {
         for page in UInt16(0)..<50 {
             let reply = try recorder.request(Frames.listFiles(page: page), type: 0x1A, id: 0x0E, timeout: 8, "recording list")
             let pageEntries = RecordingEntry.parseList(reply.payload)
+            log.notice("list 0x1A page \(page): \(reply.hex, privacy: .public) -> \(pageEntries.count) entries")
+            let before = entries.count
             for entry in pageEntries { entries[entry.fileId] = entry }
-            if pageEntries.count < 10 { break }
+            if entries.count == before { break }
         }
         return entries.values.sorted { $0.fileId > $1.fileId }
     }
@@ -108,7 +114,9 @@ final class Syncer {
             guard frame.type == 0x1A || frame.type == 0x1B else { continue }
             switch frame.id {
             case 0x07:
+                log.notice("export header \(entry.fileId): \(frame.hex, privacy: .public)")
                 let head = try crypto.prepareFile(frame.payload)
+                log.notice("export header fileSize \(head.fileSize), list size \(entry.sizeBytes)")
                 if head.fileSize > 0 { expected = Int(head.fileSize) }
             case 0x08, 0x12:
                 let raw = frame.raw
