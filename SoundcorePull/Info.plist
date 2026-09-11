@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>26.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 Kris Northfield</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Soundcore Pull connects to your Soundcore Work recorder over Bluetooth to copy recordings.</string>
 </dict>

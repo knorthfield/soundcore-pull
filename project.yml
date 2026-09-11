@@ -20,6 +20,7 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "26.0"
+        NSHumanReadableCopyright: © 2026 Kris Northfield
         NSBluetoothAlwaysUsageDescription: Soundcore Pull connects to your Soundcore Work recorder over Bluetooth to copy recordings.
     settings:
       base:

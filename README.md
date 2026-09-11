@@ -29,6 +29,9 @@ Unix timestamp, and it is what marks a recording as already downloaded.
 First launch asks for Bluetooth permission. Signing asks for the keychain password for the
 Apple Development key; choose Always Allow once.
 
+Settings (⌘,) has Launch at login. It points at the app where it was last registered, so after
+cleaning `build/` turn it off and on again.
+
 ## Icon
 
 `SoundcorePull/AppIcon.icon` is a hand-written Icon Composer bundle: the case is the icon
