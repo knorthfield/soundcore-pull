@@ -42,15 +42,15 @@ func roundedRect(_ context: CGContext, center: CGPoint, width: CGFloat, height: 
     context.fillPath()
 }
 
-let micCenter = CGPoint(x: 235, y: -235)
-let micDiameter: CGFloat = 440
+let micCenter = CGPoint(x: 332, y: -332)   // tangent to the squircle corner
+let micDiameter: CGFloat = 320
 
 // Mic: the round bean with two grille slots.
 for (variant, body, grille) in [("light", 0.80, 0.55), ("dark", 0.22, 0.45)] {
     try draw("mic-\(variant)") { context in
         circle(context, center: micCenter, diameter: micDiameter, color: gray(body))
-        for offset in [-150.0, 150.0] {
-            roundedRect(context, center: CGPoint(x: micCenter.x, y: micCenter.y + offset), width: 70, height: 16, radius: 8, color: gray(grille))
+        for offset in [-110.0, 110.0] {
+            roundedRect(context, center: CGPoint(x: micCenter.x, y: micCenter.y + offset), width: 56, height: 14, radius: 7, color: gray(grille))
         }
     }
 }
@@ -72,12 +72,12 @@ func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPo
 
 for (variant, tone) in [("light", 0.72), ("dark", 0.36)] {
     try draw("symbol-\(variant)") { context in
-        symbol(context, name: "mic.fill", pointSize: 150, center: CGPoint(x: -200, y: 200), color: gray(tone))
+        symbol(context, name: "mic.fill", pointSize: 110, center: CGPoint(x: -230, y: 230), color: gray(tone))
     }
 }
 
 // LED: orange dot below the top grille, shared by both appearances.
 try draw("led") { context in
-    circle(context, center: CGPoint(x: micCenter.x, y: micCenter.y - 110), diameter: 22,
+    circle(context, center: CGPoint(x: micCenter.x, y: micCenter.y - 78), diameter: 18,
            color: CGColor(srgbRed: 1.0, green: 0.55, blue: 0.1, alpha: 1))
 }
