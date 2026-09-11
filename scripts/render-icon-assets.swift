@@ -79,7 +79,7 @@ func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPo
 
 for (variant, tone) in [("light", 0.72), ("dark", 0.36)] {
     try draw("symbol-\(variant)") { context in
-        symbol(context, name: "music.note", pointSize: 210, center: CGPoint(x: -190, y: 175), color: gray(tone))
+        symbol(context, name: "mic.fill", pointSize: 210, center: CGPoint(x: -190, y: 175), color: gray(tone))
     }
 }
 
