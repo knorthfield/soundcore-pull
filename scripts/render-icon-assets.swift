@@ -55,7 +55,7 @@ for (variant, body, grille) in [("light", 0.80, 0.55), ("dark", 0.22, 0.45)] {
     }
 }
 
-// Symbol: an SF Symbol where the soundcore logo sits on the real case.
+// Symbol: pull-to-iCloud glyph where the soundcore logo sits on the real case.
 func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPoint, color: CGColor) {
     let configuration = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .medium)
     let image = NSImage(systemSymbolName: name, accessibilityDescription: nil)!.withSymbolConfiguration(configuration)!
@@ -72,7 +72,7 @@ func symbol(_ context: CGContext, name: String, pointSize: CGFloat, center: CGPo
 
 for (variant, tone) in [("light", 0.72), ("dark", 0.36)] {
     try draw("symbol-\(variant)") { context in
-        symbol(context, name: "mic.fill", pointSize: 110, center: CGPoint(x: -230, y: 230), color: gray(tone))
+        symbol(context, name: "icloud.and.arrow.down.fill", pointSize: 96, center: CGPoint(x: -230, y: 230), color: gray(tone))
     }
 }
 

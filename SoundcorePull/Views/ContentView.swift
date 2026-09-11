@@ -44,12 +44,39 @@ struct ContentView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(statusText).font(.headline)
+            HStack(spacing: 8) {
+                statusIcon
+                    .font(.headline)
+                    .frame(width: 20)
+                    .contentTransition(.symbolEffect(.replace))
+                Text(statusText).font(.headline)
+            }
             if case .pulling(_, let progress) = syncer.phase {
                 ProgressView(value: progress)
             } else if let info = syncer.deviceInfo, syncer.phase != .scanning {
                 Text(deviceText(info)).foregroundStyle(.secondary)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var statusIcon: some View {
+        switch syncer.phase {
+        case .scanning:
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .foregroundStyle(.secondary)
+                .symbolEffect(.rotate, options: .repeat(.continuous))
+        case .connected:
+            Image(systemName: "app.badge.fill")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.orange, .primary)
+        case .pulling:
+            Image(systemName: "icloud.and.arrow.down")
+                .foregroundStyle(.tint)
+                .symbolEffect(.pulse, options: .repeat(.continuous))
+        case .failed:
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.red)
         }
     }
 

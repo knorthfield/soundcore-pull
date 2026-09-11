@@ -35,7 +35,7 @@ cleaning `build/` turn it off and on again.
 ## Icon
 
 `SoundcorePull/AppIcon.icon` is a hand-written Icon Composer bundle: the case is the icon
-background (white in light mode, charcoal in dark mode), with the mic, clip and LED as Liquid Glass
+background (white in light mode, charcoal in dark mode), with the round mic, its LED and an `icloud.and.arrow.down.fill` symbol as Liquid Glass
 layers. `swift scripts/render-icon-assets.swift` regenerates the PNG layers. Preview with
 `"/Applications/Xcode.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool"
 SoundcorePull/AppIcon.icon --export-image --output-file out.png --platform macOS --rendition Dark
