@@ -27,6 +27,15 @@ Unix timestamp, and it is what marks a recording as already downloaded.
 First launch asks for Bluetooth permission. Signing asks for the keychain password for the
 Apple Development key; choose Always Allow once.
 
+## Icon
+
+`SoundcorePull/AppIcon.icon` is a hand-written Icon Composer bundle: the case is the icon
+background (white in light mode, charcoal in dark mode), with the mic, clip and LED as Liquid Glass
+layers. `swift scripts/render-icon-assets.swift` regenerates the PNG layers. Preview with
+`"/Applications/Xcode.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool"
+SoundcorePull/AppIcon.icon --export-image --output-file out.png --platform macOS --rendition Dark
+--width 512 --height 512 --scale 1` (`xcrun ictool` is a different binary).
+
 ## Recorder notes
 
 - It does not advertise while asleep in the case or while connected to the phone. Take it out of
