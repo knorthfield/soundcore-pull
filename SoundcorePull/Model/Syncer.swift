@@ -81,7 +81,7 @@ final class Syncer {
     private nonisolated func fetchRecordings(_ recorder: Recorder) throws -> [RecordingEntry] {
         var entries: [UInt32: RecordingEntry] = [:]
         for page in UInt16(0)..<50 {
-            let reply = try recorder.request(Frames.listFiles(page: page), type: 0x1B, id: 0x0E, timeout: 8, "recording list")
+            let reply = try recorder.request(Frames.listFiles(page: page), type: 0x1A, id: 0x0E, timeout: 8, "recording list")
             let pageEntries = RecordingEntry.parseList(reply.payload)
             for entry in pageEntries { entries[entry.fileId] = entry }
             if pageEntries.count < 10 { break }

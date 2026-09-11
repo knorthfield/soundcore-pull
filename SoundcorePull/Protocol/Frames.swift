@@ -28,7 +28,8 @@ enum Frames {
 
     // Commands
     static func getDeviceInfo() -> Data { encode(type: 0x01, id: 0x01) }
-    static func listFiles(page: UInt16) -> Data { encode(type: 0x1B, id: 0x0E, payload: u16(page)) }
+    /// The plain list (0x1A). Firmware 03.36 answers the with-end-time variant (0x1B) with an empty payload.
+    static func listFiles(page: UInt16) -> Data { encode(type: 0x1A, id: 0x0E, payload: u16(page)) }
     static func handshake(publicKey: Data) -> Data { encode(type: 0x2E, id: 0x01, payload: publicKey) }
     static func startExport(fileId: UInt32) -> Data {
         encode(type: 0x1A, id: 0x07, payload: u32(0) + u32(fileId) + Data([0x00]))
@@ -142,28 +143,21 @@ struct DeviceInfo {
 
 struct RecordingEntry {
     let fileId: UInt32
-    let endTime: UInt32
     let sizeBytes: UInt32
 
     var startDate: Date { Date(timeIntervalSince1970: TimeInterval(fileId)) }
 
-    /// Size tracks encoded milliseconds closely; the clock delta is used when it agrees.
-    var estimatedDuration: TimeInterval {
-        let bySize = TimeInterval(sizeBytes) / 1000
-        guard endTime >= fileId else { return bySize }
-        let byClock = TimeInterval(endTime - fileId)
-        let ratio = byClock / max(bySize, 0.001)
-        return (0.5...2).contains(ratio) ? byClock : bySize
-    }
+    /// Size tracks encoded milliseconds closely.
+    var estimatedDuration: TimeInterval { TimeInterval(sizeBytes) / 1000 }
 
     static func parseList(_ p: Data) -> [RecordingEntry] {
         guard p.count >= 2 else { return [] }
         let count = Int(p.u16le(at: 0))
         var entries: [RecordingEntry] = []
         var offset = 2
-        for _ in 0..<count where offset + 12 <= p.count {
-            let entry = RecordingEntry(fileId: p.u32le(at: offset), endTime: p.u32le(at: offset + 4), sizeBytes: p.u32le(at: offset + 8))
-            offset += 12
+        for _ in 0..<count where offset + 8 <= p.count {
+            let entry = RecordingEntry(fileId: p.u32le(at: offset), sizeBytes: p.u32le(at: offset + 4))
+            offset += 8
             if entry.sizeBytes > 0 { entries.append(entry) }
         }
         return entries

@@ -9,7 +9,7 @@ final class FramesTests: XCTestCase {
 
     func testEncodeListFilesPage() {
         let frame = Frames.listFiles(page: 1)
-        XCTAssertEqual([UInt8](frame), [0x08, 0xEE, 0x00, 0x00, 0x00, 0x1B, 0x0E, 0x0C, 0x00, 0x01, 0x00, 0x2C])
+        XCTAssertEqual([UInt8](frame), [0x08, 0xEE, 0x00, 0x00, 0x00, 0x1A, 0x0E, 0x0C, 0x00, 0x01, 0x00, 0x2B])
     }
 
     func testStartExportPayload() {
@@ -20,9 +20,10 @@ final class FramesTests: XCTestCase {
 
     func testPacketBufferReassemblesFragmentsAndSkipsJunk() {
         var payload = Data([0x02, 0x00])                       // two entries
-        payload += Frames.u32(1_700_000_000) + Frames.u32(1_700_000_030) + Frames.u32(30_000)
-        payload += Frames.u32(1_700_000_100) + Frames.u32(1_700_000_100) + Frames.u32(0)
-        var frame = Data([0x09, 0xFF, 0x00, 0x00, 0x01, 0x1B, 0x0E])
+        payload += Frames.u32(1_700_000_000) + Frames.u32(30_000)
+        payload += Frames.u32(1_700_000_100) + Frames.u32(0)
+        payload += Frames.u32(0) + Frames.u32(0)                // current transfer timestamp + duration
+        var frame = Data([0x09, 0xFF, 0x00, 0x00, 0x01, 0x1A, 0x0E])
         let total = UInt16(10 + payload.count)
         frame += Data([UInt8(total & 0xFF), UInt8(total >> 8)]) + payload
         frame.append(Frames.checksum(frame))
@@ -31,7 +32,7 @@ final class FramesTests: XCTestCase {
         XCTAssertTrue(buffer.feed(Data([0xAA, 0xBB]) + frame.prefix(12)).isEmpty)
         let frames = buffer.feed(frame.dropFirst(12))
         XCTAssertEqual(frames.count, 1)
-        XCTAssertEqual(frames[0].type, 0x1B)
+        XCTAssertEqual(frames[0].type, 0x1A)
         XCTAssertEqual(frames[0].id, 0x0E)
         XCTAssertEqual(frames[0].status, 1)
 

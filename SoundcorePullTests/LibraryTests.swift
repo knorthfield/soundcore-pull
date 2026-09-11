@@ -12,7 +12,7 @@ final class LibraryTests: XCTestCase {
     func testSaveThenListed() throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let library = Library(folder: folder)
-        let entry = RecordingEntry(fileId: 1_757_514_125, endTime: 1_757_514_135, sizeBytes: 10_000)
+        let entry = RecordingEntry(fileId: 1_757_514_125, sizeBytes: 10_000)
         try library.save(Data([1, 2, 3]), for: entry)
         XCTAssertEqual(library.downloadedIds(), [1_757_514_125])
         XCTAssertFalse(FileManager.default.fileExists(atPath: folder.appendingPathComponent(".\(library.fileName(for: entry)).part").path))
