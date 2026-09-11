@@ -1,0 +1,54 @@
+name: SoundcorePull
+options:
+  bundleIdPrefix: com.krisnorthfield
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+configFiles:
+  Debug: Local.xcconfig
+  Release: Local.xcconfig
+targets:
+  SoundcorePull:
+    type: application
+    platform: macOS
+    sources:
+      - SoundcorePull
+    info:
+      path: SoundcorePull/Info.plist
+      properties:
+        CFBundleDisplayName: Soundcore Pull
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: "26.0"
+        NSBluetoothAlwaysUsageDescription: Soundcore Pull connects to your Soundcore Work recorder over Bluetooth to copy recordings.
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+  SoundcorePullTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - SoundcorePullTests
+    dependencies:
+      - target: SoundcorePull
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  SoundcorePull:
+    build:
+      targets:
+        SoundcorePull: all
+        SoundcorePullTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - SoundcorePullTests

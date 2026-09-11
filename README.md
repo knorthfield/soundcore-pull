@@ -1,35 +1,39 @@
-# soundcore-pull
+# Soundcore Pull
 
-Pulls recordings off a Soundcore Work (Anker / Feishu D3200) AI voice recorder over Bluetooth LE,
-straight to a Mac. No phone, no account, no cloud. Output is Ogg/Opus, a lossless copy of what the
-device stores.
+Small macOS app that copies recordings off a Soundcore Work (Anker / Feishu D3200) AI voice
+recorder over Bluetooth LE into iCloud Drive › Soundcore Work. No phone, no account, no cloud
+service. Output is Ogg/Opus, a lossless copy of what the device stores.
 
-```
-swift build -c release
-.build/release/soundcore-pull list                 # device info and recordings
-.build/release/soundcore-pull pull [--out DIR]     # download every recording not already in DIR
-.build/release/soundcore-pull delete <fileId>...   # delete from the recorder
-.build/release/soundcore-pull scan                 # diagnostic: print nearby BLE advertisements
-```
+SwiftUI, macOS 26+, no third-party packages. The Xcode GUI is never opened.
 
-Default output directory is `~/Music/Soundcore Work`. Files are named `yyyyMMdd-HHmmss-<fileId>.ogg`.
+## What it does
 
-## Before you run it
+Leave the app open. When the recorder is awake and not held by the phone, the app connects,
+lists its recordings, and pulls anything not already in the iCloud folder. It re-checks every
+15 seconds. The toolbar has Show in Finder and Delete from Recorder (only for recordings that are
+already in iCloud).
 
-- Take the recorder out of the case, or tap it, so it advertises. It does not advertise while
-  asleep in the case or while connected to the phone.
-- Close the Soundcore app on the phone, or switch the phone's Bluetooth off. The phone auto-connects
-  to the recorder and only one central can hold the link.
-- The first run asks for Bluetooth permission for your terminal application. Grant it in
-  System Settings > Privacy & Security > Bluetooth.
+Files are named `yyyyMMdd-HHmmss-<fileId>.ogg`. The file id is the recording's start time as a
+Unix timestamp, and it is what marks a recording as already downloaded.
 
-## Tests
+## Build and run
 
-`swift test` needs the full Xcode toolchain for XCTest:
+- `project.yml` is the source of truth; `SoundcorePull.xcodeproj` is generated and git-ignored.
+- `scripts/build.sh` — xcodegen + build.
+- `scripts/run.sh` — build, then launch the app.
+- `scripts/test.sh` — unit tests.
+- `Local.xcconfig` (git-ignored) holds `DEVELOPMENT_TEAM`; `scripts/env.sh` creates a stub.
 
-```
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swift test
-```
+First launch asks for Bluetooth permission. Signing asks for the keychain password for the
+Apple Development key; choose Always Allow once.
+
+## Recorder notes
+
+- It does not advertise while asleep in the case or while connected to the phone. Take it out of
+  the case or tap it, and close the Soundcore app on the phone.
+- USB on the case is charge-only.
+- Protocol layout: `SoundcorePull/Protocol` (frames, ECDH/HKDF session, AES-CTR file decryption,
+  Ogg/Opus muxing, blocking CoreBluetooth session). The sync loop is `Model/Syncer.swift`.
 
 ## Credits
 

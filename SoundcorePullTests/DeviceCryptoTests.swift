@@ -1,5 +1,5 @@
 import XCTest
-@testable import soundcore_pull
+@testable import SoundcorePull
 
 final class DeviceCryptoTests: XCTestCase {
     func hex(_ string: String) -> Data {

@@ -36,6 +36,7 @@ final class Recorder: NSObject {
     private var pending: [Frame] = []
     private let step = DispatchSemaphore(value: 0)
     private var stepError: String?
+    private var disconnected = false
 
     var name: String { peripheral?.name ?? "soundcore Work" }
 
@@ -61,17 +62,6 @@ final class Recorder: NSObject {
         try waitStep("notifications")
     }
 
-    /// Diagnostic: print every advertisement seen for `seconds`.
-    func scanAll(seconds: TimeInterval) throws {
-        guard step.wait(timeout: .now() + 5) == .success, central.state == .poweredOn else { throw RecorderError.bluetoothOff(central.state) }
-        printingAdvertisements = true
-        central.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey: false])
-        Thread.sleep(forTimeInterval: seconds)
-        central.stopScan()
-    }
-
-    private var printingAdvertisements = false
-
     func disconnect() {
         if let peripheral { central.cancelPeripheralConnection(peripheral) }
     }
@@ -88,6 +78,7 @@ final class Recorder: NSObject {
         defer { frames.unlock() }
         let deadline = Date(timeIntervalSinceNow: timeout)
         while pending.isEmpty {
+            if disconnected { throw RecorderError.notConnected }
             guard frames.wait(until: deadline) else { throw RecorderError.timeout(what) }
         }
         return pending.removeFirst()
@@ -119,13 +110,6 @@ extension Recorder: CBCentralManagerDelegate, CBPeripheralDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
-        if printingAdvertisements {
-            let name = (advertisementData[CBAdvertisementDataLocalNameKey] as? String) ?? peripheral.name ?? "-"
-            let services = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?.map(\.uuidString).joined(separator: ",") ?? "-"
-            let manufacturer = (advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data)?.map { String(format: "%02x", $0) }.joined() ?? "-"
-            print("\(RSSI) dBm  \(name)  services=\(services)  mfr=\(manufacturer)")
-            return
-        }
         guard self.peripheral == nil else { return }
         self.peripheral = peripheral
         peripheral.delegate = self
@@ -137,7 +121,10 @@ extension Recorder: CBCentralManagerDelegate, CBPeripheralDelegate {
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) { finishStep(error) }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        if let error { fputs("disconnected: \(error.localizedDescription)\n", stderr) }
+        frames.lock()
+        disconnected = true
+        frames.broadcast()
+        frames.unlock()
     }
 
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {

@@ -1,5 +1,5 @@
 import XCTest
-@testable import soundcore_pull
+@testable import SoundcorePull
 
 final class FramesTests: XCTestCase {
     func testEncodeDeviceInfo() {
