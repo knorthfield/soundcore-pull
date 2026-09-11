@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://knorthfield.github.io/soundcore-pull/sitemap.xml

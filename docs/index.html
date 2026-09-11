@@ -3,12 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Soundcore Pull</title>
-<meta name="description" content="A small macOS app that copies recordings off a Soundcore Work recorder into iCloud Drive over Bluetooth. No phone, no account, no cloud service.">
-<meta property="og:title" content="Soundcore Pull">
-<meta property="og:description" content="Pull recordings off your Soundcore Work recorder straight into iCloud Drive. No phone, no account, no cloud service.">
+<title>Soundcore Pull: Mac app for the Soundcore Work AI voice recorder</title>
+<meta name="description" content="Free, open source Mac app for the Soundcore Work (Anker D3200) AI voice recorder. Copies recordings over Bluetooth into iCloud Drive. No phone, no account, no cloud service.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://knorthfield.github.io/soundcore-pull/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://knorthfield.github.io/soundcore-pull/">
+<meta property="og:site_name" content="Soundcore Pull">
+<meta property="og:title" content="Soundcore Pull: Mac app for the Soundcore Work recorder">
+<meta property="og:description" content="Pull recordings off your Soundcore Work (Anker D3200) recorder straight into iCloud Drive. No phone, no account, no cloud service.">
 <meta property="og:image" content="https://knorthfield.github.io/soundcore-pull/icon-light.png">
+<meta property="og:image:alt" content="Soundcore Pull app icon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Soundcore Pull: Mac app for the Soundcore Work recorder">
+<meta name="twitter:description" content="Pull recordings off your Soundcore Work (Anker D3200) recorder straight into iCloud Drive. No phone, no account, no cloud service.">
+<meta name="twitter:image" content="https://knorthfield.github.io/soundcore-pull/icon-light.png">
 <link rel="icon" href="icon-light.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Soundcore Pull",
+      "alternateName": "Soundcore Work Mac app",
+      "description": "Free, open source Mac app for the Soundcore Work (Anker D3200) AI voice recorder. Copies recordings over Bluetooth into iCloud Drive. No phone, no account, no cloud service.",
+      "url": "https://knorthfield.github.io/soundcore-pull/",
+      "downloadUrl": "https://github.com/knorthfield/soundcore-pull",
+      "image": "https://knorthfield.github.io/soundcore-pull/icon-light.png",
+      "operatingSystem": "macOS 26",
+      "applicationCategory": "UtilitiesApplication",
+      "license": "https://opensource.org/licenses/MIT",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "Kris Northfield" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is there a Soundcore Work app for Mac?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Anker only ships a phone app. Soundcore Pull is a free, open source Mac app that copies recordings from the Soundcore Work recorder to your Mac." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use the Soundcore Work recorder without the phone app?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Soundcore Pull talks to the recorder directly over Bluetooth LE. You do not need a phone, an account or a cloud service." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work with the Anker D3200 or Feishu D3200?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Soundcore Work, Anker D3200 and Feishu D3200 are the same recorder." }
+        },
+        {
+          "@type": "Question",
+          "name": "What format are the files?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Ogg/Opus. Each file is a lossless copy of what the recorder stores. Files land in iCloud Drive, in a folder named Soundcore Work." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   :root {
     color-scheme: light dark;
@@ -89,6 +146,11 @@
   .req div span { font-weight: 600; }
   code { font: 15px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--bg); padding: 2px 6px; border-radius: 6px; }
 
+  dl.faq { max-width: 720px; margin: 0 auto; }
+  dl.faq dt { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+  dl.faq dd { margin: 8px 0 28px; color: var(--muted); font-size: 16px; }
+  dl.faq dd:last-child { margin-bottom: 0; }
+
   footer { border-top: 1px solid var(--line); margin-top: 48px; padding-block: 40px 56px; color: var(--muted); font-size: 15px; text-align: center; }
   footer p + p { margin-top: 10px; }
 
@@ -107,17 +169,17 @@
 <header class="hero wrap">
   <picture>
     <source srcset="icon-dark.png" media="(prefers-color-scheme: dark)">
-    <img src="icon-light.png" alt="Soundcore Pull app icon" width="160" height="160">
+    <img src="icon-light.png" alt="Soundcore Pull, a Mac app for the Soundcore Work recorder" width="160" height="160">
   </picture>
   <h1>Soundcore Pull</h1>
-  <p class="tag">Pull recordings off your Soundcore Work recorder straight into iCloud Drive.</p>
+  <p class="tag">The Mac app that pulls recordings off your Soundcore Work AI voice recorder straight into iCloud Drive.</p>
   <p class="no">No phone. No account. No cloud service.</p>
   <a class="cta" href="https://github.com/knorthfield/soundcore-pull">Get it on GitHub</a>
   <span class="sub">Free and open source. MIT licence. macOS 26 or later.</span>
 </header>
 
 <section class="wrap">
-  <h2>Your recordings, on your Mac</h2>
+  <h2>Get Soundcore Work recordings on to your Mac</h2>
   <div class="cards">
     <div class="card">
       <div class="glyph">🔁</div>
@@ -138,7 +200,7 @@
 </section>
 
 <section class="wrap">
-  <h2>How it works</h2>
+  <h2>How to copy files from a Soundcore Work recorder to a Mac</h2>
   <ol class="steps">
     <li>
       <h3>Wake the recorder</h3>
@@ -164,7 +226,22 @@
   </div>
 </section>
 
+<section class="wrap">
+  <h2>Questions</h2>
+  <dl class="faq">
+    <dt>Is there a Soundcore Work app for Mac?</dt>
+    <dd>Anker only ships a phone app. Soundcore Pull is a free, open source Mac app that copies recordings from the Soundcore Work recorder to your Mac.</dd>
+    <dt>Can I use the Soundcore Work recorder without the phone app?</dt>
+    <dd>Yes. Soundcore Pull talks to the recorder directly over Bluetooth LE. You do not need a phone, an account or a cloud service.</dd>
+    <dt>Does it work with the Anker D3200 or Feishu D3200?</dt>
+    <dd>Yes. Soundcore Work, Anker D3200 and Feishu D3200 are the same recorder.</dd>
+    <dt>What format are the files?</dt>
+    <dd>Ogg/Opus. Each file is a lossless copy of what the recorder stores. Files land in iCloud Drive, in a folder named Soundcore Work.</dd>
+  </dl>
+</section>
+
 <footer class="wrap">
+  <p>Soundcore Pull is a Mac app for the Soundcore Work recorder, also sold as Anker D3200 and Feishu D3200.</p>
   <p>Soundcore Pull is MIT licensed. SwiftUI and CoreBluetooth. No third-party packages.</p>
   <p>Protocol from community work: <a href="https://github.com/tacshi/Soundcore">tacshi/Soundcore</a> and <a href="https://github.com/Shawn-TKD/recording-bean-web">Shawn-TKD/recording-bean-web</a>.</p>
   <p>For interoperability with hardware you own. Not affiliated with Anker or Soundcore.</p>
