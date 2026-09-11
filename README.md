@@ -6,6 +6,8 @@ service. Output is Ogg/Opus, a lossless copy of what the device stores.
 
 SwiftUI, macOS 26+, no third-party packages. The Xcode GUI is never opened.
 
+Website: https://knorthfield.github.io/soundcore-pull/
+
 ## What it does
 
 Leave the app open. When the recorder is awake and not held by the phone, the app connects,
@@ -55,3 +57,7 @@ The protocol comes from community work, not from this project:
   here are a Swift port of its logic.
 
 For interoperability with hardware you own.
+
+## Licence
+
+MIT. See [LICENSE](LICENSE), which also carries the upstream recording-bean-web notice.
