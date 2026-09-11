@@ -54,10 +54,11 @@ The protocol comes from community work, not from this project:
   (`PROTOCOL.md`) from the Anker SDK inside the Feishu Android app. Used as reference only.
 - [Shawn-TKD/recording-bean-web](https://github.com/Shawn-TKD/recording-bean-web) (MIT) is a
   browser client for the same recorder. The framing, key exchange, chunk decryption and Ogg muxing
-  here are a Swift port of its logic.
+  here are a Swift port of its logic. Its notice: Copyright (c) 2026 Recording Bean Local
+  contributors, MIT License.
 
 For interoperability with hardware you own.
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE), which also carries the upstream recording-bean-web notice.
+MIT. See [LICENSE](LICENSE). The ported recording-bean-web code is MIT too; see Credits.
