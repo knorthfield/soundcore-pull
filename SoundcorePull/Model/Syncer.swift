@@ -15,6 +15,8 @@ final class Syncer {
     private(set) var recordings: [RecordingEntry] = []
     private(set) var downloaded: Set<UInt32>
 
+    var rows: [RecordingRow] { RecordingRow.merge(onRecorder: recordings, downloaded: downloaded) }
+
     let library: Library
     private let pendingDeletes = PendingDeletes()
 

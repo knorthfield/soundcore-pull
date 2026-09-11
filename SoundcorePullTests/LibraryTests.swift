@@ -17,4 +17,13 @@ final class LibraryTests: XCTestCase {
         XCTAssertEqual(library.downloadedIds(), [1_757_514_125])
         XCTAssertFalse(FileManager.default.fileExists(atPath: folder.appendingPathComponent(".\(library.fileName(for: entry)).part").path))
     }
+
+    func testMergeRecorderAndICloud() {
+        let onRecorder = [RecordingEntry(fileId: 100, sizeBytes: 1_000), RecordingEntry(fileId: 300, sizeBytes: 3_000)]
+        let rows = RecordingRow.merge(onRecorder: onRecorder, downloaded: [200, 300])
+        XCTAssertEqual(rows.map(\.fileId), [300, 200, 100])
+        XCTAssertEqual(rows.map(\.statusText), ["On recorder · Downloaded", "Downloaded", "On recorder"])
+        XCTAssertNil(rows[1].onRecorder)
+        XCTAssertEqual(rows[2].onRecorder?.sizeBytes, 1_000)
+    }
 }

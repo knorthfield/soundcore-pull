@@ -39,3 +39,33 @@ struct Library {
         _ = try FileManager.default.replaceItemAt(folder.appendingPathComponent(name), withItemAt: temp)
     }
 }
+
+/// One line in the recording list: on the recorder, in iCloud, or both.
+struct RecordingRow: Identifiable {
+    let fileId: UInt32
+    let onRecorder: RecordingEntry?
+    let downloaded: Bool
+
+    var id: UInt32 { fileId }
+    var startDate: Date { Date(timeIntervalSince1970: TimeInterval(fileId)) }
+
+    var statusText: String {
+        switch (onRecorder != nil, downloaded) {
+        case (true, true): return "On recorder · Downloaded"
+        case (true, false): return "On recorder"
+        default: return "Downloaded"
+        }
+    }
+
+    /// Unions the recorder list with the iCloud folder, newest first.
+    static func merge(onRecorder: [RecordingEntry], downloaded: Set<UInt32>) -> [RecordingRow] {
+        var byId: [UInt32: RecordingRow] = [:]
+        for entry in onRecorder {
+            byId[entry.fileId] = RecordingRow(fileId: entry.fileId, onRecorder: entry, downloaded: downloaded.contains(entry.fileId))
+        }
+        for fileId in downloaded where byId[fileId] == nil {
+            byId[fileId] = RecordingRow(fileId: fileId, onRecorder: nil, downloaded: true)
+        }
+        return byId.values.sorted { $0.fileId > $1.fileId }
+    }
+}

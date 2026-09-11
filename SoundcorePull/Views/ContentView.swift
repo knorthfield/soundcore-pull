@@ -11,11 +11,11 @@ struct ContentView: View {
             header
                 .padding()
             Divider()
-            List(syncer.recordings, id: \.fileId, selection: $selection) { entry in
-                row(entry)
+            List(syncer.rows, selection: $selection) { row in
+                self.row(row)
             }
             .overlay {
-                if syncer.recordings.isEmpty {
+                if syncer.rows.isEmpty {
                     Text(syncer.phase == .scanning ? "Wake the recorder to see its recordings." : "No recordings on the recorder.")
                         .foregroundStyle(.secondary)
                 }
@@ -38,8 +38,9 @@ struct ContentView: View {
     }
 
     private var canDeleteSelection: Bool {
-        guard let selection, syncer.phase != .scanning else { return false }
-        return syncer.downloaded.contains(selection)
+        guard let selection, syncer.phase != .scanning,
+              let row = syncer.rows.first(where: { $0.fileId == selection }) else { return false }
+        return row.onRecorder != nil && row.downloaded
     }
 
     private var header: some View {
@@ -99,19 +100,29 @@ struct ContentView: View {
         return parts.joined(separator: " · ")
     }
 
-    private func row(_ entry: RecordingEntry) -> some View {
+    private func row(_ row: RecordingRow) -> some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(Self.date.string(from: entry.startDate))
-                Text("\(Self.duration.string(from: entry.estimatedDuration) ?? "") · \(ByteCountFormatter.string(fromByteCount: Int64(entry.sizeBytes), countStyle: .file))")
+                Text(Self.date.string(from: row.startDate))
+                Text(caption(row))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Image(systemName: symbol(for: entry.fileId))
-                .foregroundStyle(syncer.downloaded.contains(entry.fileId) ? .green : .secondary)
+            Image(systemName: symbol(for: row.fileId))
+                .foregroundStyle(row.downloaded ? .green : .secondary)
         }
         .padding(.vertical, 2)
+    }
+
+    private func caption(_ row: RecordingRow) -> String {
+        var parts: [String] = []
+        if let entry = row.onRecorder {
+            parts.append(Self.duration.string(from: entry.estimatedDuration) ?? "")
+            parts.append(ByteCountFormatter.string(fromByteCount: Int64(entry.sizeBytes), countStyle: .file))
+        }
+        parts.append(row.statusText)
+        return parts.joined(separator: " · ")
     }
 
     private func symbol(for fileId: UInt32) -> String {
